@@ -1764,7 +1764,7 @@ bool CWallet::GetStakeWeightFromValue(const int64_t nTime, const int64_t nValue,
 	if (nTimeWeight < 0 )
 		nTimeWeight=0;
 	CBigNum bnCoinDayWeight;
-	if(nTime > FORK_TIME)
+	if(GetTime() > FORK_TIME)
 		bnCoinDayWeight = CBigNum(nValue) * nTimeWeight * 100 / COIN / (24 * 60 * 60);
 	else
 		bnCoinDayWeight = CBigNum(nValue) * nTimeWeight / COIN / (24 * 60 * 60);
