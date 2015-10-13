@@ -1964,7 +1964,7 @@ bool CWallet::GetStakeWeight(const CKeyStore& keystore, uint64_t& nMinWeight, ui
 
         int64_t nTimeWeight = GetWeight((int64_t)pcoin.first->nTime, (int64_t)GetTime());
 		CBigNum bnCoinDayWeight;
-		if(pcoin.first->nTime > FORK_TIME)
+		if(GetTime() > FORK_TIME)
 			bnCoinDayWeight = CBigNum(pcoin.first->vout[pcoin.second].nValue) * nTimeWeight * 100 / COIN / (24 * 60 * 60);
 		else
 			bnCoinDayWeight = CBigNum(pcoin.first->vout[pcoin.second].nValue) * nTimeWeight / COIN / (24 * 60 * 60);
@@ -2034,8 +2034,12 @@ bool CWallet::GetStakeWeight2(const CKeyStore& keystore, uint64_t& nMinWeight, u
 			nHoursToMaturity = ((nStakeAge - nPrevAge) / 60 / 60) + 1;
 		}
 
-        int64_t nTimeWeight = GetWeight2((int64_t)pcoin.first->nTime, (int64_t)GetTime());
-        CBigNum bnCoinDayWeight = CBigNum(pcoin.first->vout[pcoin.second].nValue) * nTimeWeight / COIN / (24 * 60 * 60);
+        int64_t nTimeWeight = GetWeight((int64_t)pcoin.first->nTime, (int64_t)GetTime());
+		CBigNum bnCoinDayWeight;
+		if(GetTime() > FORK_TIME)
+			bnCoinDayWeight = CBigNum(pcoin.first->vout[pcoin.second].nValue) * nTimeWeight * 100 / COIN / (24 * 60 * 60);
+		else
+			bnCoinDayWeight = CBigNum(pcoin.first->vout[pcoin.second].nValue) * nTimeWeight / COIN / (24 * 60 * 60);
 
 		if ((nStakeAge - nCurrentAge) < (60*60*24*7)) // if the age is less than 7 days, report weight as 0 because the stake modifier won't allow for stake yet
 			bnCoinDayWeight = 0;
