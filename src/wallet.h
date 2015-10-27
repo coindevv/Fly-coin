@@ -139,7 +139,7 @@ public:
 		//MultiSend
 		vMultiSend.clear();
 		fMultiSend = false;
-		fMultiSendCoinStake = false;
+		fMultiSendCoinStake = true;
 		fMultiSendNotify = false;
 		strMultiSendChangeAddress = "";
 		nLastMultiSendHeight = 0;
@@ -169,7 +169,7 @@ public:
 		//MultiSend
 		vMultiSend.clear();
 		fMultiSend = false;
-		fMultiSendCoinStake = false;
+		fMultiSendCoinStake = true;
 		fMultiSendNotify = false;
 		strMultiSendChangeAddress = "";
 		nLastMultiSendHeight = 0;

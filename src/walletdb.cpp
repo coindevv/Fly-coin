@@ -447,9 +447,9 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
 		}
 		else if (strType == "mcoinstake")
 		{
-			bool fMultiSendCoinStake;
+			/*bool fMultiSendCoinStake;
 			ssValue >> fMultiSendCoinStake;
-			pwallet->fMultiSendCoinStake = fMultiSendCoinStake;
+			pwallet->fMultiSendCoinStake = fMultiSendCoinStake;*/
 		}
 		else if(strType == "hashdrift")//presstab HyperStake  
 		{  

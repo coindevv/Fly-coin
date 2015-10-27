@@ -2522,7 +2522,7 @@ Value savings(const Array &params, bool fHelp)
 				return "disabled address from sending Savings transactions";
 		}
 	}
-	if(params.size() == 2 && params[0].get_str() == "coinstake")
+	/*if(params.size() == 2 && params[0].get_str() == "coinstake")
 	{
 		std::string strCoinStake = params[1].get_str();
 		if(strCoinStake == "true")
@@ -2543,7 +2543,7 @@ Value savings(const Array &params, bool fHelp)
 		}	
 		else
 			return "Did not recognize parameter";
-	}
+	}*/
 	//if no commands are used
 	if (fHelp || params.size() != 2)
         throw runtime_error(
@@ -2563,7 +2563,7 @@ Value savings(const Array &params, bool fHelp)
 			"   delete <Address #> - deletes an address from the Savings vector \n"
 			"   disable <address> - prevents a specific address from sending Savings transactions\n"
 			"   enableall - enables all addresses to be eligible to send Savings transactions\n"
-			"   coinstake <true/false> - this will send the savings transaction in the coinstake transaction\n"
+			/*"   coinstake <true/false> - this will send the savings transaction in the coinstake transaction\n"*/
 			
 			"****************************************************************\n"
 			"TO CREATE OR ADD TO THE SAVINGS VECTOR:\n"
