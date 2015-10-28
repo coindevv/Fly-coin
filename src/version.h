@@ -35,6 +35,7 @@ static const int PROTOCOL_VERSION = 60030;
 // earlier versions not supported as of Feb 2012, and are disconnected
 static const int MIN_PROTO_VERSION = 60020;
 static const int MIN_PROTO_VERSION_FORK = 60030;
+static const int MIN_PROTO_VERSION_FORK_2 = 60040;
 
 // nTime field added to CAddress, starting with this version;
 // if possible, avoid requesting addresses nodes older than this
@@ -44,6 +45,7 @@ static const int CADDR_TIME_VERSION = 31402;
 static const int NOBLKS_VERSION_START = 60002;
 static const int NOBLKS_VERSION_END = 60019;
 static const int NOBLKS_VERSION_END_FORK = 60029;
+static const int NOBLKS_VERSION_END_FORK_2 = 60039;
 
 // BIP 0031, pong message, is enabled for all versions AFTER this one
 static const int BIP0031_VERSION = 60000;
