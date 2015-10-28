@@ -1099,7 +1099,7 @@ int64_t GetProofOfStakeReward(int64_t nCoinAge, unsigned int nBits, unsigned int
 
 		return nSubsidy + nBonusSubsidy + nFees;
 	}
-	else //new superblock reward
+	else if (nTime < FORK_TIME_2) //new superblock reward
 	{
 		CBigNum bnSubsidy = CBigNum(nCoinAge) * nRewardCoinYear / 365 / COIN;
 		int64_t nSubsidy = bnSubsidy.getuint64();
@@ -1110,6 +1110,35 @@ int64_t GetProofOfStakeReward(int64_t nCoinAge, unsigned int nBits, unsigned int
 		const char* cseed = cseed_str.c_str();
 		long seed = hex2long(cseed);
 		int rand1 = generateMTRandom(seed, 1000000);
+
+		if(rand1 <= 500) // 0.5% chance
+			nBonusMultiplier = 2;
+		if(rand1 <= 400) // 0.4% chance
+			nBonusMultiplier = 3;
+		if(rand1 <= 90) // 0.09% chance
+			nBonusMultiplier = 5;
+		if(rand1 <= 9) // 0.009% chance
+			nBonusMultiplier = 10;
+		if(rand1 <= 1) // 0.0001% chance
+			nBonusMultiplier = 20;
+			
+		if (fDebug && GetBoolArg("-printcreation"))
+			printf("GetProofOfStakeReward(): create=%s nCoinAge=%"PRId64" nBits=%d\n", FormatMoney(nSubsidy).c_str(), nCoinAge, nBits);
+
+		return (nSubsidy * nBonusMultiplier) + nFees;
+	}
+	else
+	{
+		CBigNum bnSubsidy = CBigNum(nCoinAge) * nRewardCoinYear / 365 / COIN;
+		int64_t nSubsidy = bnSubsidy.getuint64();
+		nBonusMultiplier = 1;
+		
+		//super block calculations from breakcoin
+		std::string cseed_str = prevHash.ToString().substr(7,7);
+		const char* cseed = cseed_str.c_str();
+		long seed = hex2long(cseed);
+		int rand1 = generateMTRandom(seed, 1000000);
+		rand1 *= 2; // double the odds for this fork
 
 		if(rand1 <= 500) // 0.5% chance
 			nBonusMultiplier = 2;
