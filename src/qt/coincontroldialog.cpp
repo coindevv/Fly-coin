@@ -24,7 +24,7 @@
 #include <QTreeWidgetItem>
 
 using namespace std;
-QList<qint64> CoinControlDialog::payAmounts;
+QList<std::pair<QString, qint64> > CoinControlDialog::payAmounts;
 int CoinControlDialog::nSplitBlockCount;
 CCoinControl* CoinControlDialog::coinControl = new CCoinControl();
 
@@ -536,25 +536,6 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
 {
     if (!model) return;
 
-    // nPayAmount
-    qint64 nPayAmount = 0;
-    bool fLowOutput = false;
-    bool fDust = false;
-    CTransaction txDummy;
-    foreach(const qint64 &amount, CoinControlDialog::payAmounts)
-    {
-        nPayAmount += amount;
-
-        if (amount > 0)
-        {
-            if (amount < CENT)
-                fLowOutput = true;
-
-            CTxOut txout(amount, (CScript)vector<unsigned char>(24, 0));
-            txDummy.vout.push_back(txout);
-        }
-    }
-
     QString sPriorityLabel      = "";
     int64_t nAmount             = 0;
     int64_t nPayFee             = 0;
@@ -571,6 +552,9 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
     coinControl->ListSelected(vCoinControl);
     model->getOutputs(vCoinControl, vOutputs);
 
+	std::vector<QString> vecInAddresses;
+	
+	//Transaction Inputs
     BOOST_FOREACH(const COutput& out, vOutputs)
     {
         // Quantity
@@ -594,16 +578,47 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
                 nBytesInputs += 148; // in all error cases, simply assume 148 here
         }
         else nBytesInputs += 148;
+		
+		vecInAddresses.push_back(QString(CBitcoinAddress(address).ToString().c_str()));
+    }
+	
+	// nPayAmount - Transaction Outputs
+    qint64 nPayAmount = 0; 
+    bool fLowOutput = false;
+    bool fDust = false;
+	qint64 nValueAdditionalFee = 0;
+    CTransaction txDummy;
+    for(int i = 0; i < CoinControlDialog::payAmounts.size(); i++)
+    {
+        qint64 amount = CoinControlDialog::payAmounts[i].second;
+		QString qAddress = CoinControlDialog::payAmounts[i].first;
+		nPayAmount += amount;
+
+        if (amount > 0)
+        {
+            if (amount < CENT)
+                fLowOutput = true;
+
+            CTxOut txout(amount, (CScript)vector<unsigned char>(24, 0));
+            txDummy.vout.push_back(txout);
+        }
+		
+		if((std::find(vecInAddresses.begin(), vecInAddresses.end(), qAddress) != vecInAddresses.end()))
+			continue;
+		else
+			nValueAdditionalFee += amount * 10 / 100;
     }
     
+	
+	
     // calculation
     if (nQuantity > 0)
     {
 		// Outputs
-		// always assume +1 output for change here
-		int64_t nOutputCount = (CoinControlDialog::payAmounts.size() > 0 ? CoinControlDialog::payAmounts.size() + 1 : 2);
+		// always assume +2 output for change & additional fee output
+		int64_t nOutputCount = (CoinControlDialog::payAmounts.size() > 0 ? CoinControlDialog::payAmounts.size() + 2 : 3);
 		if(pwalletMain->fSplitBlock)
-			nOutputCount = nSplitBlockCount + 1; 
+			nOutputCount = nSplitBlockCount + 2; 
 		
 	   // Bytes
         nBytes = nBytesInputs + (nOutputCount * 34) + 10; 
@@ -614,17 +629,14 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
         
         // Fee
         int64_t nFee = nTransactionFee * (1 + (int64_t)nBytes / 1000);
-        
+		
         // Min Fee
-        int64_t nMinFee = txDummy.GetMinFee(1, GMF_SEND, nBytes);
+        int64_t nMinFee = txDummy.GetMinFee(1, GMF_SEND, nBytes) + nValueAdditionalFee;
         
         nPayFee = max(nFee, nMinFee);
-
-        //nPayFee = nFee;
-		//if(pwalletMain->fSplitBlock)
-	//	{
-		//	nPayFee = nMinFee * COIN; // make the fee more expensive if using splitblock, this avoids having to calc fee based on multiple vouts
-		//}
+		
+		if(!coinControl->fReturnChange && nAmount - nPayAmount - nPayFee > 0)
+			nPayFee += (nAmount - nPayAmount - nPayFee) * 10 / 100;
 	        
         if (nPayAmount > 0)
         {

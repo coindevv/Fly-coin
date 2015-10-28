@@ -63,6 +63,7 @@ void SendCoinsEntry::on_payTo_textChanged(const QString &address)
     QString associatedLabel = model->getAddressTableModel()->labelForAddress(address);
     if(!associatedLabel.isEmpty())
         ui->addAsLabel->setText(associatedLabel);
+	payAmountChanged(); // this will trigger coin control labels to update fee's and check address if it pays 'additional fee'
 }
 
 void SendCoinsEntry::setModel(WalletModel *model)

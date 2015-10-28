@@ -2305,13 +2305,18 @@ Value ccreset(const Array& params, bool fHelp)
 // presstab HyperStake
 Value ccsend(const Array& params, bool fHelp)
 {
-    if (fHelp || params.size() != 2)
+    if (fHelp || params.size() > 3)
         throw runtime_error(
-		"ccsend <FlyCoin Address> <amount>\n"
-            "<amount> is a real and is rounded to the nearest 0.000001"
+		"ccsend <FlyCoin Address> <amount><true/false>\n"
+            "<amount> is a real and is rounded to the nearest 0.000001\n"
+			"<true/false> if true this will not send the transaction and will only return the fee amount required\n"
             + HelpRequiringPassphrase());
 
     CBitcoinAddress address(params[0].get_str());
+	bool fFeeRetOnly = false;
+	if(params.size() > 2)
+		fFeeRetOnly = boost::lexical_cast<bool>(params[2].get_str());
+	
     if (!address.IsValid())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid FlyCoin address");
 
@@ -2333,7 +2338,10 @@ Value ccsend(const Array& params, bool fHelp)
         scriptPubKey.SetDestination(address.Get());
     vecSend.push_back(make_pair(scriptPubKey, nAmount));
 	
-    bool fCreated = pwalletMain->CreateTransaction(vecSend, wtx, keyChange, nFeeRequired, 1, coinControl); // 1 = no splitblock, false for s4c, coinControl
+	
+	if(fFeeRetOnly)
+		return nFeeRequired;
+	bool fCreated = pwalletMain->CreateTransaction(vecSend, wtx, keyChange, nFeeRequired, 1, coinControl); // 1 = no splitblock, false for s4c, coinControl
     if (!fCreated)
     {
         if (nAmount + nFeeRequired > pwalletMain->GetBalance())

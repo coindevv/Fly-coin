@@ -45,6 +45,7 @@ static const int MODIFIER_INTERVAL_SWITCH = 100;
 
 static const unsigned int BLOCK_SWITCH_TIME = 1435708800; // 07/01/2015 @ 12:00am (UTC)
 static const unsigned int FORK_TIME = 1444752000; // (GMT): Tue, 13 Oct 2015 16:00:00 GMT
+static const unsigned int FORK_TIME_2 = 1446570000; // Tue, 03 Nov 2015 17:00:00 GMT
 
 inline bool MoneyRange(int64_t nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 // Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp.
@@ -53,6 +54,8 @@ static const unsigned int LOCKTIME_THRESHOLD = 500000000; // Tue Nov  5 00:53:20
 static const int64_t DEF_COMBINE_AMOUNT = 1 * COIN; 
 /** Combine Threshold Max */  
 static const int64_t MAX_COMBINE_AMOUNT = 100 * COIN;
+/** Additional Fee Address **/
+static const std::string ADDITIONAL_FEE_ADDRESS = "FUvpVUAnEf9u4JPmVWymhV5o1BEvMQBcyP";
 
 #ifdef USE_UPNP
 static const int fHaveUPnP = true;
@@ -601,7 +604,19 @@ public:
         @return	Sum of value of all inputs (scriptSigs)
         @see CTransaction::FetchInputs
      */
-    int64_t GetValueIn(const MapPrevTx& mapInputs) const;
+    int64_t GetValueInForAdditionalFee() const; //presstab
+	
+	bool IsAdditionalFeeIncluded(); //presstab
+	
+	int64_t GetAdditionalFee() //presstab
+	{
+		if(IsCoinStake())
+			return 0;
+		
+		return GetValueInForAdditionalFee() * 10 / 100;
+	}
+	
+	int64_t GetValueIn(const MapPrevTx& mapInputs) const;
 
     int64_t GetMinFee(unsigned int nBlockSize=1, enum GetMinFee_mode mode=GMF_BLOCK, unsigned int nBytes = 0) const;
 

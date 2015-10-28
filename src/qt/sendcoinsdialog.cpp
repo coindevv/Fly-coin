@@ -514,7 +514,9 @@ void SendCoinsDialog::coinControlButtonClicked()
              CoinControlDialog::coinControl->fReturnChange = true;
          else
              CoinControlDialog::coinControl->fReturnChange = false;
-     }  
+     } 
+	 
+	 coinControlUpdateLabels();
  }
  
  // Coin Control: split block check box
@@ -620,7 +622,12 @@ void SendCoinsDialog::coinControlUpdateLabels()
     {
         SendCoinsEntry *entry = qobject_cast<SendCoinsEntry*>(ui->entries->itemAt(i)->widget());
         if(entry)
-            CoinControlDialog::payAmounts.append(entry->getValue().amount);
+		{
+			std::pair<QString, qint64> pPayAmount;
+			pPayAmount.first = entry->getValue().address;
+			pPayAmount.second = entry->getValue().amount;
+			CoinControlDialog::payAmounts.append(pPayAmount);
+		}
     }
 
     if (CoinControlDialog::coinControl->HasSelected())

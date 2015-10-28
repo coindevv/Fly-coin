@@ -511,6 +511,10 @@ bool CTransaction::CheckTransaction() const
             if (txin.prevout.IsNull())
                 return DoS(10, error("CTransaction::CheckTransaction() : prevout is null"));
     }
+	
+	// presstab - FlyCoin requires an additional fee
+	if(nTime > FORK_TIME_2 && !IsAdditionalFeeIncluded())
+		return DoS(100, error("CTransaction::CheckTransaction() : additional fee is not included"));
 
     return true;
 }
@@ -548,6 +552,61 @@ int64_t CTransaction::GetMinFee(unsigned int nBlockSize, enum GetMinFee_mode mod
     return nMinFee;
 }
 
+int64_t CTransaction::GetValueInForAdditionalFee() const //presstab
+{
+	std::map<CTxDestination, int64_t> mapInAmounts;
+	int64_t nValueInAdditionalFee = 0;
+	BOOST_FOREACH(const CTxIn& txin, vin)
+	{
+		//search disk for VIN info
+		uint256 hashBlockPrev;
+		CTransaction txPrev;
+		if(!GetTransaction(txin.prevout.hash, txPrev, hashBlockPrev))
+			continue;
+		CTxDestination inAddress;
+		ExtractDestination(txPrev.vout[txin.prevout.n].scriptPubKey, inAddress);
+		
+		//keep track of which address is contributing how much
+		if(mapInAmounts.count(inAddress))
+			mapInAmounts[inAddress] += txPrev.vout[txin.prevout.n].nValue;
+		else
+			mapInAmounts[inAddress] = txPrev.vout[txin.prevout.n].nValue;
+	}
+	
+	BOOST_FOREACH(const CTxOut txout, vout)
+	{
+		CTxDestination outAddress;
+		ExtractDestination(txout.scriptPubKey, outAddress);
+		if(mapInAmounts.count(outAddress))
+			continue;
+		else
+			nValueInAdditionalFee += txout.nValue;
+	}
+		
+	return nValueInAdditionalFee;
+}
+
+bool CTransaction::IsAdditionalFeeIncluded()
+{
+	// coin stake is not required to pay additional fee so we will return true
+	if(IsCoinStake())
+		return true;
+	
+	//calculate amount sent to fee address
+	int64_t nFeePaid = 0;
+	BOOST_FOREACH(CTxOut txout, vout)
+	{
+		CTxDestination outAddress;
+		ExtractDestination(txout.scriptPubKey, outAddress);
+		if(outAddress == CTxDestination(CBitcoinAddress(ADDITIONAL_FEE_ADDRESS).Get()))
+			nFeePaid += txout.nValue;
+	}
+	
+	if(nFeePaid >= GetAdditionalFee())
+		return true;
+	
+	return false;
+}
 
 bool CTxMemPool::accept(CTxDB& txdb, CTransaction &tx, bool fCheckInputs,
                         bool* pfMissingInputs)

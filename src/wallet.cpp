@@ -1692,6 +1692,8 @@ bool CWallet::SelectCoins(int64_t nTargetValue, unsigned int nSpendTime, set<pai
 {
     vector<COutput> vCoins;
     AvailableCoins(vCoins, true, coinControl);
+	
+	nTargetValue += nTargetValue * 10 / 100;
 
     // coin control -> return all selected outputs (we want all selected to go into the transaction for sure)
     if (coinControl && coinControl->HasSelected())
@@ -1838,8 +1840,20 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, int64_t> >& vecSend, 
 					//note that this will use the last address run through the FOREACH, needs better logic added
 					ExtractDestination(pcoin.first->vout[pcoin.second].scriptPubKey, utxoAddress); 
                 }
+				
+				// Fill vin
+                BOOST_FOREACH(const PAIRTYPE(const CWalletTx*,unsigned int)& coin, setCoins)
+                    wtxNew.vin.push_back(CTxIn(coin.first->GetHash(),coin.second));
+				
+				
+				//additional 10% fee added to transactions
+				CScript scriptAdditionalFee;
+				scriptAdditionalFee.SetDestination(CTxDestination(CBitcoinAddress(ADDITIONAL_FEE_ADDRESS).Get()));
+				int64_t nAdditionalFee = wtxNew.GetValueInForAdditionalFee() * 10 / 100;
+				int64_t nChangeAdditionalFee = (nValueIn - nValue - nFeeRet - nAdditionalFee) * 10 / 100;
+				
 
-                int64_t nChange = nValueIn - nValue - nFeeRet;
+                int64_t nChange = nValueIn - nValue - nFeeRet - nAdditionalFee - nChangeAdditionalFee;
                 // if sub-cent change is required, the fee must be raised to at least MIN_TX_FEE
                 // or until nChange becomes zero
                 // NOTE: this depends on the exact behaviour of GetMinFee
@@ -1857,15 +1871,22 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, int64_t> >& vecSend, 
                     // change transaction isn't always pay-to-bitcoin-address
                     CScript scriptChange;
 					if (coinControl && coinControl->fReturnChange == true)
+					{
+						nChange += nChangeAdditionalFee;
 						scriptChange.SetDestination(utxoAddress);
+					}
                     // coin control: send change to custom address
                     else if (coinControl && !boost::get<CNoDestination>(&coinControl->destChange))
-                        scriptChange.SetDestination(coinControl->destChange);
-
+					{
+						nAdditionalFee += nChangeAdditionalFee;
+						scriptChange.SetDestination(coinControl->destChange);
+					}
                     // no coin control: send change to newly generated address
                     else
                     {
-                        // Note: We use a new key here to keep it from being obvious which side is the change.
+                        nAdditionalFee += nChangeAdditionalFee;
+						
+						// Note: We use a new key here to keep it from being obvious which side is the change.
                         //  The drawback is that by not reusing a previous key, the change may be lost if a
                         //  backup is restored, if the backup doesn't have the new private key for the change.
                         //  If we reused the old key, it would be possible to add code to look for and
@@ -1884,11 +1905,10 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, int64_t> >& vecSend, 
                 }
                 else
                     reservekey.ReturnKey();
-
-                // Fill vin
-                BOOST_FOREACH(const PAIRTYPE(const CWalletTx*,unsigned int)& coin, setCoins)
-                    wtxNew.vin.push_back(CTxIn(coin.first->GetHash(),coin.second));
-
+				
+				if(nAdditionalFee)
+					wtxNew.vout.push_back(CTxOut(nAdditionalFee, scriptAdditionalFee));
+				
                 // Sign
                 int nIn = 0;
                 BOOST_FOREACH(const PAIRTYPE(const CWalletTx*,unsigned int)& coin, setCoins)
@@ -1910,6 +1930,9 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, int64_t> >& vecSend, 
                     nFeeRet = max(nPayFee, nMinFee);
                     continue;
                 }
+				
+				if(coinControl && !coinControl->fReturnChange)
+					nFeeRet += nAdditionalFee;
 
                 // Fill vtxPrev by copying from previous transactions vtxPrev
                 wtxNew.AddSupportingTransactions(txdb);
