@@ -70,7 +70,11 @@ public:
         RecvFromOther,
         SendToSelf,
         StakeMint,
-		StakeMintBonus
+		StakeMintBonus2,
+		StakeMintBonus3,
+		StakeMintBonus5,
+		StakeMintBonus10,
+		StakeMintBonus20
     };
 
     /** Number of confirmation recommended for accepting a transaction */

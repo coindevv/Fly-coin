@@ -83,7 +83,19 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
 			if(nRewardMultiplier > 1)
 			{
 				int64_t nSuperBlockReward = nReward - nBaseReward;
-				TransactionRecord txrCoinStakeBonus = TransactionRecord(hash, nTime, TransactionRecord::StakeMintBonus, CBitcoinAddress(address).ToString(), 0, nSuperBlockReward);
+				TransactionRecord txrCoinStakeBonus = TransactionRecord(hash, nTime, TransactionRecord::StakeMintBonus2, CBitcoinAddress(address).ToString(), 0, nSuperBlockReward);
+				
+				if(nRewardMultiplier < 3)
+					txrCoinStakeBonus.type = TransactionRecord::StakeMintBonus2;
+				else if(nRewardMultiplier < 5)
+					txrCoinStakeBonus.type = TransactionRecord::StakeMintBonus3;
+				else if(nRewardMultiplier < 10)
+					txrCoinStakeBonus.type = TransactionRecord::StakeMintBonus5;
+				else if(nRewardMultiplier < 20)
+					txrCoinStakeBonus.type = TransactionRecord::StakeMintBonus10;
+				else
+					txrCoinStakeBonus.type = TransactionRecord::StakeMintBonus20;
+				
 				// Stake generation
 				txrCoinStake.credit = wtx.GetValueOut() - nSuperBlockReward;
 				parts.append(txrCoinStake);
