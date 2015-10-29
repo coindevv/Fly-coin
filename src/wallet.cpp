@@ -1692,8 +1692,6 @@ bool CWallet::SelectCoins(int64_t nTargetValue, unsigned int nSpendTime, set<pai
 {
     vector<COutput> vCoins;
     AvailableCoins(vCoins, true, coinControl);
-	
-	nTargetValue += nTargetValue * 10 / 100;
 
     // coin control -> return all selected outputs (we want all selected to go into the transaction for sure)
     if (coinControl && coinControl->HasSelected())
