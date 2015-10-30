@@ -383,15 +383,35 @@ QVariant TransactionTableModel::txAddressDecoration(const TransactionRecord *wtx
     {
     case TransactionRecord::Generated:
     case TransactionRecord::StakeMint:
+	{
+		QString str = BitcoinUnits::format(walletModel->getOptionsModel()->getDisplayUnit(), wtx->credit + wtx->debit);
+		return QIcon(":/icons/tx_mined");
+	}
 	case TransactionRecord::StakeMintBonus2:
+	{
+		QString str = BitcoinUnits::format(walletModel->getOptionsModel()->getDisplayUnit(), wtx->credit + wtx->debit);
+		return QIcon(":/icons/tx_mined_bonus2");
+	}
 	case TransactionRecord::StakeMintBonus3:
+	{
+		QString str = BitcoinUnits::format(walletModel->getOptionsModel()->getDisplayUnit(), wtx->credit + wtx->debit);
+		return QIcon(":/icons/tx_mined_bonus3");
+	}
 	case TransactionRecord::StakeMintBonus5:
+	{
+		QString str = BitcoinUnits::format(walletModel->getOptionsModel()->getDisplayUnit(), wtx->credit + wtx->debit);
+		return QIcon(":/icons/tx_mined_bonus5");
+	}
 	case TransactionRecord::StakeMintBonus10:
+	{
+		QString str = BitcoinUnits::format(walletModel->getOptionsModel()->getDisplayUnit(), wtx->credit + wtx->debit);
+		return QIcon(":/icons/tx_mined_bonus10");
+	}
 	case TransactionRecord::StakeMintBonus20:
-		{
-			QString str = BitcoinUnits::format(walletModel->getOptionsModel()->getDisplayUnit(), wtx->credit + wtx->debit);
-			return QIcon(":/icons/tx_mined");
-		}
+	{
+		QString str = BitcoinUnits::format(walletModel->getOptionsModel()->getDisplayUnit(), wtx->credit + wtx->debit);
+		return QIcon(":/icons/tx_mined_bonus20");
+	}
     case TransactionRecord::RecvWithAddress:
     case TransactionRecord::RecvFromOther:
         return QIcon(":/icons/tx_input");
