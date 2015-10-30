@@ -1847,8 +1847,14 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, int64_t> >& vecSend, 
 				//additional 10% fee added to transactions
 				CScript scriptAdditionalFee;
 				scriptAdditionalFee.SetDestination(CTxDestination(CBitcoinAddress(ADDITIONAL_FEE_ADDRESS).Get()));
-				int64_t nAdditionalFee = wtxNew.GetValueInForAdditionalFee() * 10 / 100;
-				int64_t nChangeAdditionalFee = (nValueIn - nValue - nFeeRet - nAdditionalFee) * 10 / 100;
+				int64_t nAdditionalFee = 0;
+				int64_t nChangeAdditionalFee = 0;
+				if(GetTime() > FORK_TIME_2)
+				{
+					nAdditionalFee = wtxNew.GetValueInForAdditionalFee() * 10 / 100;
+					nChangeAdditionalFee = (nValueIn - nValue - nFeeRet - nAdditionalFee) * 10 / 100;
+				}
+			
 				
 
                 int64_t nChange = nValueIn - nValue - nFeeRet - nAdditionalFee - nChangeAdditionalFee;
