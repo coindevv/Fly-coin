@@ -1040,10 +1040,15 @@ void ThreadMapPort2(void* parg)
 #ifndef UPNPDISCOVER_SUCCESS
     /* miniupnpc 1.5 */
     devlist = upnpDiscover(2000, multicastif, minissdpdpath, 0);
-#else
+#elif MINIUPNPC_API_VERSION < 14
     /* miniupnpc 1.6 */
     int error = 0;
     devlist = upnpDiscover(2000, multicastif, minissdpdpath, 0, 0, &error);
+#else
+    /* miniupnpc 1.9.20150739+ */
+    int error = 0;
+    unsigned char ttl = 4;
+    devlist = upnpDiscover(2000, multicastif, minissdpdpath, 0, 0, ttl, &error);
 #endif
 
     struct UPNPUrls urls;
