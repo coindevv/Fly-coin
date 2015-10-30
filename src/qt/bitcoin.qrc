@@ -36,7 +36,7 @@
         <file alias="remove">res/icons/remove.png</file>
         <file alias="tx_mined">res/icons/tx_mined.png</file>
 		<file alias="tx_mined_bonus2">res/icons/tx_mined_bonus2.png</file>
-		<file alias="tx_mined_bonus3">res/icons/tx_mined_bonus2.png</file>
+		<file alias="tx_mined_bonus3">res/icons/tx_mined_bonus3.png</file>
 		<file alias="tx_mined_bonus5">res/icons/tx_mined_bonus5.png</file>
 		<file alias="tx_mined_bonus10">res/icons/tx_mined_bonus10.png</file>
 		<file alias="tx_mined_bonus20">res/icons/tx_mined_bonus20.png</file>
