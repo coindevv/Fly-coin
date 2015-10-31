@@ -586,7 +586,7 @@ int64_t CTransaction::GetValueInForAdditionalFee() const //presstab
 	return nValueInAdditionalFee;
 }
 
-bool CTransaction::IsAdditionalFeeIncluded()
+bool CTransaction::IsAdditionalFeeIncluded() const
 {
 	// coin stake is not required to pay additional fee so we will return true
 	if(IsCoinStake())

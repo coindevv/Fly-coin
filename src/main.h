@@ -606,9 +606,9 @@ public:
      */
     int64_t GetValueInForAdditionalFee() const; //presstab
 	
-	bool IsAdditionalFeeIncluded(); //presstab
+	bool IsAdditionalFeeIncluded() const; //presstab
 	
-	int64_t GetAdditionalFee() //presstab
+	int64_t GetAdditionalFee() const //presstab
 	{
 		if(IsCoinStake())
 			return 0;
