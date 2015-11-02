@@ -88,9 +88,7 @@ QMenu::item:selected {
 
 /* ToolBar & ToolButtons */
 QToolBar {
-	background:#000;
-	qproperty-iconSize: 24px 24px;
-	qproperty-toolButtonStyle: ToolButtonTextBesideIcon;
+	qproperty-iconSize: 128px 42px;
 	border:none;
 	border-bottom:1px solid #333;
 	padding:10px;
@@ -101,26 +99,24 @@ QToolBar::handle {
 	background-position: top center;
 }
 QToolButton {
-	color:#02898f;
-	background:#2a2a2a;
-	qproperty-toolButtonStyle: ToolButtonTextBesideIcon;
+	qproperty-toolButtonStyle: ToolButtonIconOnly;
 	border:none;
-	border-radius:10px;
-	padding:2px;
-	margin:2px;
+	border-radius: 5px;
+	padding:1px;
+	margin:0px;
 	width: 100%;
 }
 QToolButton:hover {
 	color: #000;
-	background:#f4cc0e;
+	background:#02898f;
 }
 QToolButton:checked {
-	color:#f4cc0e;
-	background:#2a2a2a;
+	color:#02898f;
+	background:#02898f;
 }
 QToolButton:pressed {
 	color: #000;
-	background:#f4cc0e;
+	background:#02898f;
 }
 QToolButton:disabled {
 	color:#000;

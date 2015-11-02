@@ -252,47 +252,47 @@ void BitcoinGUI::createActions()
 {
     QActionGroup *tabGroup = new QActionGroup(this);
 
-    overviewAction = new QAction(QIcon(":/icons/overview"), tr("&Overview"), this);
+    overviewAction = new QAction(QIcon(":/icons/overview"), tr(""), this);
     overviewAction->setToolTip(tr("Show general overview of wallet"));
     overviewAction->setCheckable(true);
     overviewAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_1));
     tabGroup->addAction(overviewAction);
 
-        statisticsAction = new QAction(QIcon(":/icons/statistics"), tr("&Statistics"), this);
+        statisticsAction = new QAction(QIcon(":/icons/statistics"), tr(""), this);
     statisticsAction->setToolTip(tr("View statistics"));
     statisticsAction->setCheckable(true);
     tabGroup->addAction(statisticsAction);
 
-    chatAction = new QAction(QIcon(":/icons/social"), tr("&Social"), this);
+    chatAction = new QAction(QIcon(":/icons/social"), tr(""), this);
     chatAction->setToolTip(tr("View chat, links to social media and exchanges"));
     chatAction->setCheckable(true);
     tabGroup->addAction(chatAction);
 
-    sendCoinsAction = new QAction(QIcon(":/icons/send"), tr("&Send coins"), this);
+    sendCoinsAction = new QAction(QIcon(":/icons/sendbutton"), tr(""), this);
     sendCoinsAction->setToolTip(tr("Send coins to a FlyCoin address"));
     sendCoinsAction->setCheckable(true);
     sendCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_2));
     tabGroup->addAction(sendCoinsAction);
 
-    receiveCoinsAction = new QAction(QIcon(":/icons/receiving_addresses"), tr("&Receive coins"), this);
+    receiveCoinsAction = new QAction(QIcon(":/icons/receiving_addresses"), tr(""), this);
     receiveCoinsAction->setToolTip(tr("Show the list of addresses for receiving payments"));
     receiveCoinsAction->setCheckable(true);
     receiveCoinsAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_3));
     tabGroup->addAction(receiveCoinsAction);
 
-    historyAction = new QAction(QIcon(":/icons/history"), tr("&Transactions"), this);
+    historyAction = new QAction(QIcon(":/icons/transactions"), tr(""), this);
     historyAction->setToolTip(tr("Browse transaction history"));
     historyAction->setCheckable(true);
     historyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_4));
     tabGroup->addAction(historyAction);
 
-    addressBookAction = new QAction(QIcon(":/icons/address-book"), tr("&Address Book"), this);
+    addressBookAction = new QAction(QIcon(":/icons/addresses"), tr(""), this);
     addressBookAction->setToolTip(tr("Edit the list of stored addresses and labels"));
     addressBookAction->setCheckable(true);
     addressBookAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
     tabGroup->addAction(addressBookAction);
 
-        blockAction = new QAction(QIcon(":/icons/block"), tr("&Block Explorer"), this);
+        blockAction = new QAction(QIcon(":/icons/block"), tr(""), this);
     blockAction->setToolTip(tr("Explore the BlockChain"));
     blockAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
     blockAction->setCheckable(true);
@@ -1395,11 +1395,11 @@ void BitcoinGUI::loadTheme(QString theme)
 		"QMenu {color: #02898f;background:#000;border:none;border-left:1px solid #333;border-bottom:1px solid #333;border-right:1px solid #333;padding:10px;border-bottom-left-radius:6px;border-bottom-right-radius:6px;}"
 		"QMenu::item {color: #02898f;background:#000;}"
 		"QMenu::item:selected { color: #000;background-color:#02898f;}"
-		"QToolBar {background:#000;qproperty-iconSize: 24px 24px;qproperty-toolButtonStyle: ToolButtonTextBesideIcon;border:none;border-bottom:1px solid #333;padding:10px;}"
+		"QToolBar {background:#000;qproperty-iconSize: 128px 42px;qproperty-toolButtonStyle: ToolButtonIconOnly;border:none;border-bottom:1px solid #333;padding:10px;}"
 		"QToolBar::handle {padding: 0px;background-repeat: repeat-y;background-position: top center;}"
-		"QToolButton {color:#02898f;background:#2a2a2a;qproperty-toolButtonStyle: ToolButtonTextBesideIcon;border:none;border-radius:10px;padding:2px;margin:2px; width: 100%;}"
+		"QToolButton {qproperty-toolButtonStyle: ToolButtonTextBesideIcon;border:none;border-radius:5px;padding:1px;margin:0px; }"
 		"QToolButton:hover {color: #000;background:#02898f;}"
-		"QToolButton:checked {	color:#02898f;	background:#2a2a2a;}"
+		"QToolButton:checked {	color:#02898f;	background:#02898f;}"
 		"QToolButton:pressed {	color: #000;	background:#02898f;}"
 		"QToolButton:disabled {color:#000;	background:#000;}"
 		
