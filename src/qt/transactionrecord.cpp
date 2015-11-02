@@ -69,6 +69,8 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
 			uint256 prevHash = 0;
 			if(pindex->pprev)
 				prevHash = pindex->pprev->GetBlockHash();
+			else
+				return parts;
 			
 			uint64_t nCoinAge;
 			CTxDB txdb("r");

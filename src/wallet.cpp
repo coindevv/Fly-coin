@@ -640,7 +640,10 @@ bool CWallet::IsChange(const CTxOut& txout) const
 
 int64_t CWalletTx::GetTxTime() const
 {
-    int64_t n = nTimeSmart;
+    if(nTime)
+		return nTime;
+	
+	int64_t n = nTimeSmart;
     return n ? n : nTimeReceived;
 }
 
