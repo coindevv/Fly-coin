@@ -24,7 +24,7 @@
         <file alias="options">res/icons/configure.png</file>
         <file alias="receiving_addresses">res/icons/receive.png</file>
 		<file alias="addresses">res/icons/addresses.png</file>
-		<file alias="transactions">res/icons/transactions.png</file>
+		<file alias="transactions">res/icons/transactionbutton.png</file>
 		<file alias="sendbutton">res/icons/sendbutton.png</file>
         <file alias="editpaste">res/icons/editpaste.png</file>
         <file alias="editcopy">res/icons/editcopy.png</file>
