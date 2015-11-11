@@ -632,12 +632,12 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
 		
         // Min Fee
         int64_t nMinFee = txDummy.GetMinFee(1, GMF_SEND, nBytes);
-		if(GetTime() > FORK_TIME_2)
+		if(GetTime() > FORK_TIME_2 && GetTime() < FORK_TIME_3)
 			nMinFee += nValueAdditionalFee;
         
         nPayFee = max(nFee, nMinFee);
 		
-		if(GetTime() > FORK_TIME_2 && !coinControl->fReturnChange && nAmount - nPayAmount - nPayFee > 0)
+		if(GetTime() > FORK_TIME_2 && GetTime() < FORK_TIME_3 && !coinControl->fReturnChange && nAmount - nPayAmount - nPayFee > 0)
 			nPayFee += (nAmount - nPayAmount - nPayFee) * 10 / 100;
 	        
         if (nPayAmount > 0)

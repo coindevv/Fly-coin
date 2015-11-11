@@ -513,7 +513,7 @@ bool CTransaction::CheckTransaction() const
     }
 	
 	// presstab - FlyCoin requires an additional fee
-	if(nTime > FORK_TIME_2 && !IsAdditionalFeeIncluded())
+	if(nTime > FORK_TIME_2 && nTime < FORK_TIME_3 && !IsAdditionalFeeIncluded())
 		return DoS(100, error("CTransaction::CheckTransaction() : additional fee is not included"));
 
     return true;
