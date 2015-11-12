@@ -125,8 +125,9 @@ Value getrawtransaction(const Array& params, bool fHelp)
     if (!GetTransaction(hash, tx, hashBlock))
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "No information available about transaction");
 	
-	return tx.IsAdditionalFeeIncluded();
-/*
+    if (GetBoolArg("-presstabexplorer", true))
+        return tx.IsAdditionalFeeIncluded();
+
     CDataStream ssTx(SER_NETWORK, PROTOCOL_VERSION);
     ssTx << tx;
     string strHex = HexStr(ssTx.begin(), ssTx.end());
@@ -137,7 +138,7 @@ Value getrawtransaction(const Array& params, bool fHelp)
     Object result;
     result.push_back(Pair("hex", strHex));
     TxToJSON(tx, hashBlock, result);
-    return result;*/
+    return result;
 }
 
 Value listunspent(const Array& params, bool fHelp)
