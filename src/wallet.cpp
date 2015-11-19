@@ -1861,7 +1861,12 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, int64_t> >& vecSend, 
 					nChangeAdditionalFee = (nValueIn - nFeeRet - nValueInForAdditionalFee) * 10 / 100;
 				}
 			
-				
+				if(GetTime() > FORK_TIME_4)
+				{
+					int64_t nValueInForAdditionalFee = wtxNew.GetValueInForAdditionalFee();
+					nAdditionalFee = GetAdditionalFeeFromTable(nValueInForAdditionalFee);
+					nChangeAdditionalFee = GetAdditionalFeeFromTable(nValueIn - nFeeRet - nValueInForAdditionalFee);
+				}				
 
                 int64_t nChange = nValueIn - nValue - nFeeRet - nAdditionalFee - nChangeAdditionalFee;
                 // if sub-cent change is required, the fee must be raised to at least MIN_TX_FEE

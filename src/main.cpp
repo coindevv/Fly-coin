@@ -516,6 +516,9 @@ bool CTransaction::CheckTransaction() const
 	if(nTime > FORK_TIME_2 && nTime < FORK_TIME_3 && !IsAdditionalFeeIncluded())
 		return DoS(100, error("CTransaction::CheckTransaction() : additional fee is not included"));
 
+	if(nTime > FORK_TIME_3 && !IsAdditionalFeeIncludedV2())
+		return DoS(100, error("CTransaction::CheckTransaction() : additional fee is not included"));
+	
     return true;
 }
 
@@ -577,7 +580,7 @@ int64_t CTransaction::GetValueInForAdditionalFee() const //presstab
 	{
 		CTxDestination outAddress;
 		ExtractDestination(txout.scriptPubKey, outAddress);
-		if(mapInAmounts.count(outAddress))
+		if(mapInAmounts.count(outAddress) || IsInFeeExcemptionList(outAddress))
 			continue;
 		else
 			nValueInAdditionalFee += txout.nValue;
@@ -586,23 +589,37 @@ int64_t CTransaction::GetValueInForAdditionalFee() const //presstab
 	return nValueInAdditionalFee;
 }
 
-bool CTransaction::IsAdditionalFeeIncluded() const
+
+int64_t GetPaidFee()
 {
-	// coin stake is not required to pay additional fee so we will return true
-	if(IsCoinStake())
-		return true;
-	
-	//calculate amount sent to fee address
 	int64_t nFeePaid = 0;
+	
 	BOOST_FOREACH(CTxOut txout, vout)
 	{
 		CTxDestination outAddress;
 		ExtractDestination(txout.scriptPubKey, outAddress);
 		if(outAddress == CTxDestination(CBitcoinAddress(ADDITIONAL_FEE_ADDRESS).Get()))
 			nFeePaid += txout.nValue;
-	}
+	}	
+}
+
+bool CTransaction::IsAdditionalFeeIncluded() const
+{
+	if(IsCoinStake())
+		return true;
+
+	if(GetPaidFee() >= GetAdditionalFee())
+		return true;
 	
-	if(nFeePaid >= GetAdditionalFee())
+	return false;
+}
+
+bool CTransaction::IsAdditionalFeeIncludedV2() const
+{
+	if(IsCoinStake())
+		return true;
+
+	if(GetPaidFee() >= GetAdditionalFeeV2())
 		return true;
 	
 	return false;
