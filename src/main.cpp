@@ -515,10 +515,10 @@ bool CTransaction::CheckTransaction() const
 	
 	// presstab - FlyCoin requires an additional fee
 	if(nTime > FORK_TIME_2 && nTime < FORK_TIME_3 && !IsAdditionalFeeIncluded())
-		return DoS(100, error("CTransaction::CheckTransaction() : additional fee is not included"));
+		return DoS(100, error("CTransaction::CheckTransaction() : additional fee is not included (V1)"));
 
 	if(nTime > FORK_TIME_4 && !IsAdditionalFeeIncludedV2())
-		return DoS(100, error("CTransaction::CheckTransaction() : additional fee is not included"));
+		return DoS(100, error("CTransaction::CheckTransaction() : additional fee is not included (V2)"));
 	
     return true;
 }
@@ -602,6 +602,8 @@ int64_t CTransaction::GetPaidFee() const
 		if(outAddress == CTxDestination(CBitcoinAddress(ADDITIONAL_FEE_ADDRESS).Get()))
 			nFeePaid += txout.nValue;
 	}	
+	
+	return nFeePaid;
 }
 int64_t CTransaction::GetAdditionalFeeV2() const
 {

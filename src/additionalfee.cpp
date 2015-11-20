@@ -157,8 +157,8 @@ int64_t AdditionalFee::GetAdditionalFeeFromTable(int64_t additionalFeeValue) //k
 	if (additionalFeeValue >= 6000 && additionalFeeValue < 8000)
 		return 5999;
 	
-	if (additionalFeeValue >= 8000)
-		return additionalFeeValue * 99 / 100;		
+
+	return additionalFeeValue * 99 / 100;		
 }
 	
 bool AdditionalFee::IsInFeeExcemptionList(CTxDestination destination) //keesdewit
