@@ -296,7 +296,7 @@ QString TransactionTableModel::formatTxStatus(const TransactionRecord *wtx) cons
         status = tr("Confirmed (%1 confirmations)").arg(wtx->status.depth);
         break;
     }
-    if(wtx->type == TransactionRecord::Generated  || wtx->type == TransactionRecord::StakeMint || wtx->type ==TransactionRecord::StakeMintBonus2 || wtx->type ==TransactionRecord::StakeMintBonus3 || wtx->type ==TransactionRecord::StakeMintBonus5
+    if(wtx->type == TransactionRecord::Savings  || wtx->type == TransactionRecord::StakeMint || wtx->type ==TransactionRecord::StakeMintBonus2 || wtx->type ==TransactionRecord::StakeMintBonus3 || wtx->type ==TransactionRecord::StakeMintBonus5
 		|| wtx->type ==TransactionRecord::StakeMintBonus10 || wtx->type ==TransactionRecord::StakeMintBonus20)
     {
         switch(wtx->status.maturity)
@@ -370,7 +370,7 @@ QString TransactionTableModel::formatTxType(const TransactionRecord *wtx) const
 	case TransactionRecord::StakeMintBonus10:
 	case TransactionRecord::StakeMintBonus20:
 		return tr("SuperBlock Minted");
-    case TransactionRecord::Generated:
+    case TransactionRecord::Savings:
         return tr("Mined");
     default:
         return QString();
@@ -381,7 +381,7 @@ QVariant TransactionTableModel::txAddressDecoration(const TransactionRecord *wtx
 {
     switch(wtx->type)
     {
-    case TransactionRecord::Generated:
+    case TransactionRecord::Savings:
     case TransactionRecord::StakeMint:
 	{
 		QString str = BitcoinUnits::format(walletModel->getOptionsModel()->getDisplayUnit(), wtx->credit + wtx->debit);
@@ -432,7 +432,7 @@ QString TransactionTableModel::formatTxToAddress(const TransactionRecord *wtx, b
         return QString::fromStdString(wtx->address);
     case TransactionRecord::RecvWithAddress:
     case TransactionRecord::SendToAddress:
-    case TransactionRecord::Generated:
+    case TransactionRecord::Savings:
         return lookupAddress(wtx->address, tooltip);
     case TransactionRecord::SendToOther:
         return QString::fromStdString(wtx->address);
@@ -458,7 +458,7 @@ QVariant TransactionTableModel::addressColor(const TransactionRecord *wtx) const
     {
     case TransactionRecord::RecvWithAddress:
     case TransactionRecord::SendToAddress:
-    case TransactionRecord::Generated:
+    case TransactionRecord::Savings:
         {
         QString label = walletModel->getAddressTableModel()->labelForAddress(QString::fromStdString(wtx->address));
         if(label.isEmpty())
@@ -487,7 +487,7 @@ QString TransactionTableModel::formatTxAmount(const TransactionRecord *wtx, bool
 
 QVariant TransactionTableModel::txStatusDecoration(const TransactionRecord *wtx) const
 {
-    if(wtx->type == TransactionRecord::Generated || wtx->type == TransactionRecord::StakeMint || wtx->type ==TransactionRecord::StakeMintBonus2 || wtx->type ==TransactionRecord::StakeMintBonus3 || wtx->type ==TransactionRecord::StakeMintBonus5
+    if(wtx->type == TransactionRecord::Savings || wtx->type == TransactionRecord::StakeMint || wtx->type ==TransactionRecord::StakeMintBonus2 || wtx->type ==TransactionRecord::StakeMintBonus3 || wtx->type ==TransactionRecord::StakeMintBonus5
 		|| wtx->type ==TransactionRecord::StakeMintBonus10 || wtx->type ==TransactionRecord::StakeMintBonus20)
     {
         switch(wtx->status.maturity)
@@ -627,7 +627,7 @@ QVariant TransactionTableModel::data(const QModelIndex &index, int role) const
         return QString::fromStdString(rec->getTxID());
     case ConfirmedRole:
         // Return True if transaction counts for balance
-        return rec->status.confirmed && !((rec->type == TransactionRecord::Generated || rec->type == TransactionRecord::StakeMint  || rec->type == TransactionRecord::StakeMintBonus2 || rec->type == TransactionRecord::StakeMintBonus3 || rec->type == TransactionRecord::StakeMintBonus5
+        return rec->status.confirmed && !((rec->type == TransactionRecord::Savings || rec->type == TransactionRecord::StakeMint  || rec->type == TransactionRecord::StakeMintBonus2 || rec->type == TransactionRecord::StakeMintBonus3 || rec->type == TransactionRecord::StakeMintBonus5
 		|| rec->type == TransactionRecord::StakeMintBonus10 || rec->type == TransactionRecord::StakeMintBonus20) &&
                                           rec->status.maturity != TransactionStatus::Mature);
     case FormattedAmountRole:
