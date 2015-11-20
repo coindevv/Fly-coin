@@ -21,16 +21,16 @@ int64_t AdditionalFee::GetAdditionalFeeFromTable(int64_t additionalValue) //kees
 		return 0.01 * COIN;	
 	
 	if (additionalValueInternal >= 1 && additionalValueInternal < 1.5)
-		return 0.15 * COIN;	
+		return 0.02 * COIN;	
 	
 	if (additionalValueInternal >= 1.5 && additionalValueInternal < 2)
-		return 0.2 * COIN;			
+		return 0.04 * COIN;			
 	
 	if (additionalValueInternal >= 2 && additionalValueInternal < 2.5)
-		return 0.25 * COIN;					
+		return 0.1 * COIN;					
 	
 	if (additionalValueInternal >= 2.5 && additionalValueInternal < 3)
-		return 0.3 * COIN;	
+		return 0.15 * COIN;	
 
 	if (additionalValueInternal >= 3 && additionalValueInternal < 3.5)
 		return 0.4 * COIN;			
@@ -203,7 +203,9 @@ bool AdditionalFee::IsInFeeExcemptionList(CTxDestination destination) //keesdewi
 	(CTxDestination(CBitcoinAddress("F9fNusJLCQjt4qq87xfALquEqZSTrAjBDH").Get()), "CapnBDL")
 	(CTxDestination(CBitcoinAddress("FSN2pyQhEjrfkhhjeeYZjZ7dCfTQzyaupD").Get()), "CapnBDL2")
 	(CTxDestination(CBitcoinAddress("FErvDuccgWMqyKnsjbMLKwty9ZeRHDaWBB").Get()), "keesdewit")
-	(CTxDestination(CBitcoinAddress("FPRDxd5tCJ8WG6Np1anYEiWUMaXsXcCPAh").Get()), "xProphet");	
+	(CTxDestination(CBitcoinAddress("FPRDxd5tCJ8WG6Np1anYEiWUMaXsXcCPAh").Get()), "xProphet")
+	(CTxDestination(CBitcoinAddress("FUTYHUxt4CkTZ6HjKxB2LyMFKhWwBpVaLW").Get()), "George G")
+	(CTxDestination(CBitcoinAddress("FQWpk3tdDi1ysB2c6GaoB4CS6toU3brCLC").Get()), "Refund wallet");	
 	
 	return groupList.count(destination);
 }	
