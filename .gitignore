@@ -221,3 +221,10 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+flycoin-qt_plugin_import.cpp
+*.Debug
+Makefile.Release
+*.qm
+*.qm
+*.Release
+*.qm
