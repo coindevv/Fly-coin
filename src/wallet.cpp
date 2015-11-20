@@ -12,6 +12,8 @@
 #include "base58.h"
 #include "kernel.h"
 #include "coincontrol.h"
+#include "additionalfee.h"
+
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/range/algorithm.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
@@ -1864,8 +1866,8 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, int64_t> >& vecSend, 
 				if(GetTime() > FORK_TIME_4)
 				{
 					int64_t nValueInForAdditionalFee = wtxNew.GetValueInForAdditionalFee();
-					nAdditionalFee = GetAdditionalFeeFromTable(nValueInForAdditionalFee);
-					nChangeAdditionalFee = GetAdditionalFeeFromTable(nValueIn - nFeeRet - nValueInForAdditionalFee);
+					nAdditionalFee = AdditionalFee::GetAdditionalFeeFromTable(nValueInForAdditionalFee);
+					nChangeAdditionalFee = AdditionalFee::GetAdditionalFeeFromTable(nValueIn - nFeeRet - nValueInForAdditionalFee);
 				}				
 
                 int64_t nChange = nValueIn - nValue - nFeeRet - nAdditionalFee - nChangeAdditionalFee;

@@ -9,6 +9,7 @@
 #include "coincontrol.h"
 #include "qcomboboxfiltercoins.h"
 #include "bitcoinrpc.h"
+#include "../additionalfee.h"
 
 #include <QApplication>
 #include <QCheckBox>
@@ -609,7 +610,7 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
 		{
 			if (GetTime() > FORK_TIME_4)
 			{
-				nValueAdditionalFee += GetAdditionalFeeFromTable(amount);
+				nValueAdditionalFee += AdditionalFee::GetAdditionalFeeFromTable(amount);
 			} else {
 				nValueAdditionalFee += amount * 10 / 100;
 			}
@@ -651,7 +652,7 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
 			nPayFee += (nAmount - nPayAmount - nPayFee) * 10 / 100;
 	    
 		if (GetTime() > FORK_TIME_4)
-			nPayFee += GetAdditionalFeeFromTable(nAmount - nPayAmount - nPayFee);
+			nPayFee += AdditionalFee::GetAdditionalFeeFromTable(nAmount - nPayAmount - nPayFee);
 			
         if (nPayAmount > 0)
         {

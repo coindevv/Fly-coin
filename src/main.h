@@ -12,7 +12,6 @@
 #include "script.h"
 #include "scrypt.h"
 #include "hashblock.h"
-
 #include <list>
 
 class CWallet;
@@ -608,9 +607,13 @@ public:
      */
     int64_t GetValueInForAdditionalFee() const; //presstab
 	
+	int64_t GetPaidFee() const; //keesdewit
+	
 	bool IsAdditionalFeeIncluded() const; //presstab
 	
 	bool IsAdditionalFeeIncludedV2() const;
+	
+	
 	
 	int64_t GetAdditionalFee() const //presstab
 	{
@@ -620,217 +623,8 @@ public:
 		return GetValueInForAdditionalFee() * 10 / 100;
 	}
 		
-	int64_t GetAdditionalFeeV2() const //keesdewit
-	{
-		if(IsCoinStake())
-			return 0;
-		
-		int64_t additionalFeeValue = GetValueInForAdditionalFee();
-		
-		return GetAdditionalFeeFromTable(additionalFeeValue);
-	}	
+	int64_t GetAdditionalFeeV2() const; //keesdewit
 	
-	int64_t GetAdditionalFeeFromTable(int64_t additionalFeeValue) const //keesdewit
-	{
-		if (additionalFeeValue < 0.001)
-			return 0.00001;
-		
-		if (additionalFeeValue >= 0.001 && < 0.01)
-			return 0.0001;
-		
-		if (additionalFeeValue >= 0.01 && < 0.1)
-			return 0.001;		
-		
-		if (additionalFeeValue >= 0.1 && < 1)
-			return 0.01;	
-		
-		if (additionalFeeValue >= 1 && < 1.5)
-			return 0.15;	
-		
-		if (additionalFeeValue >= 1.5 && < 2)
-			return 0.2;			
-		
-		if (additionalFeeValue >= 2 && < 2.5)
-			return 0.25;					
-		
-		if (additionalFeeValue >= 2.5 && < 3)
-			return 0.3;	
-
-		if (additionalFeeValue >= 3 && < 3.5)
-			return 0.4;			
-		
-		if (additionalFeeValue >= 3.5 && < 4)
-			return 0.5;		
-
-		if (additionalFeeValue >= 4 && < 4.5)
-			return 0.55;
-
-		if (additionalFeeValue >= 4.5 && < 5)
-			return 0.7;
-		
-		if (additionalFeeValue >= 5 && < 5.5)
-			return 0.8;
-
-		if (additionalFeeValue >= 5.5 && < 6)
-			return 0.95;
-
-		if (additionalFeeValue >= 6 && < 6.5)
-			return 1;
-
-		if (additionalFeeValue >= 6.5 && < 7)
-			return 1.3;
-
-		if (additionalFeeValue >= 7 && < 7.5)
-			return 1.6;
-
-		if (additionalFeeValue >= 7.5 && < 8)
-			return 1.8;
-
-		if (additionalFeeValue >= 8 && < 8.5)
-			return 1.9;
-
-		if (additionalFeeValue >= 8.5 && < 9)
-			return 2;
-
-		if (additionalFeeValue >= 9 && < 10)
-			return 2.2;
-
-		if (additionalFeeValue >= 10 && < 15)
-			return 2.5;
-
-		if (additionalFeeValue >= 15 && < 20)
-			return 3;
-
-		if (additionalFeeValue >= 20 && < 25)
-			return 4.5;
-
-		if (additionalFeeValue >= 25 && < 30)
-			return 5.7;
-
-		if (additionalFeeValue >= 30 && < 35)
-			return 6.8;
-
-		if (additionalFeeValue >= 35 && < 40)
-			return 8.2;
-
-		if (additionalFeeValue >= 40 && < 45)
-			return 12;
-
-		if (additionalFeeValue >= 45 && < 50)
-			return 15;
-
-		if (additionalFeeValue >= 50 && < 60)
-			return 17;
-
-		if (additionalFeeValue >= 60 && < 70)
-			return 22;
-
-		if (additionalFeeValue >= 70 && < 80)
-			return 26;
-
-		if (additionalFeeValue >= 80 && < 90)
-			return 30;
-
-		if (additionalFeeValue >= 90 && < 100)
-			return 35;
-
-		if (additionalFeeValue >= 100 && < 120)
-			return 45;
-
-		if (additionalFeeValue >= 120 && < 140)
-			return 60;
-
-		if (additionalFeeValue >= 140 && < 160)
-			return 72;
-
-		if (additionalFeeValue >= 180 && < 200)
-			return 90;
-
-		if (additionalFeeValue >= 200 && < 250)
-			return 100;
-
-		if (additionalFeeValue >= 250 && < 300)
-			return 120;
-
-		if (additionalFeeValue >= 300 && < 400)
-			return 160;
-
-		if (additionalFeeValue >= 400 && < 500)
-			return 185;
-
-		if (additionalFeeValue >= 500 && < 600)
-			return 220;
-
-		if (additionalFeeValue >= 600 && < 700)
-			return 260;
-
-		if (additionalFeeValue >= 700 && < 800)
-			return 300;
-
-		if (additionalFeeValue >= 800 && < 900)
-			return 350;
-
-		if (additionalFeeValue >= 900 && < 1000)
-			return 500;
-
-		if (additionalFeeValue >= 1000 && < 2000)
-			return 999;
-		
-		if (additionalFeeValue >= 2000 && < 4000)
-			return 1999;
-
-		if (additionalFeeValue >= 4000 && < 6000)
-			return 3999;
-
-		if (additionalFeeValue >= 6000 && < 8000)
-			return 5999;
-		
-		if (additionalFeeValue >= 8000)
-			return additionalFeeValue * 99 / 100;		
-	}
-	
-	bool IsInFeeExcemptionList(CTxDestination destination)
-	{
-		std::map<CTxDestination, std::string> groupList = map_list_of
-		(CTxDestination(CBitcoinAddress("FNcVD1aUpaaJBsqiuyLvbtS4TaJ3HaoBjN").Get()), "Vegasguy")
-		(CTxDestination(CBitcoinAddress("F7Lv4KtwfthnUJZMgAKM1fWBv8SPyxKzeH").Get()), "metamorphin")
-		(CTxDestination(CBitcoinAddress("FLB4LH3S4vJmjJGaRcJnsE6tjuBm7QkrGu").Get()), "Woody20285")
-		(CTxDestination(CBitcoinAddress("FMzTY4pPwaqsaVq429xy4mrGpRowsH17xm").Get()), "Woman A")
-		(CTxDestination(CBitcoinAddress("FNu4TpNNfJymE9t1T8KT2X6s51Y2zYUWps").Get()), "Europecoin")
-		(CTxDestination(CBitcoinAddress("FNHgEQBKCHQkMMYL8dqE6xt38bRNPg4NPa").Get()), "Mrs_Dandy4200")
-		(CTxDestination(CBitcoinAddress("FHMjQjT3x1NiX2azJ27aFN6kiqdhUGwYFX").Get()), "Pokeytex")
-		(CTxDestination(CBitcoinAddress("FRPBumyaEWJCu1Y9a2XBMdwj83DFjFmivt").Get()), "Crazyivan3800")
-		(CTxDestination(CBitcoinAddress("FRNqyBF2wVXshGg2UtA8jcggWCVHAoN1qe").Get()), "tkari")
-		(CTxDestination(CBitcoinAddress("FBbsz5mFhSvQo6Ro4ZpnvQqZtzHNpJEM84").Get()), "Dexter")
-		(CTxDestination(CBitcoinAddress("F9jeMU4AJ7sviq6krXWEGsfhqaKy5mzU6i").Get()), "GIminer")
-		(CTxDestination(CBitcoinAddress("F6225UCtHHhUik2D8HrXGgaapiPU3n3d65").Get()), "dennislevy")
-		(CTxDestination(CBitcoinAddress("FC4bWKbVT5wefKzKGN5q3eSGy1yPjvu4tm").Get()), "TimC")
-		(CTxDestination(CBitcoinAddress("FF97x8GRWd7yRGqymx8M3DVvGGN7sxWxon").Get()), "Cryptonit")
-		(CTxDestination(CBitcoinAddress("FEkiUvd6wKHtiWKy87Cwo1Rbx1dgqUWfF7").Get()), "bittamak")
-		(CTxDestination(CBitcoinAddress("FUvpVUAnEf9u4JPmVWymhV5o1BEvMQBcyP").Get()), "SuperFLY")
-		(CTxDestination(CBitcoinAddress("FRANKroMjve2cw8YoRsnujNexodisPpiL9").Get()), "c00p3r")
-		(CTxDestination(CBitcoinAddress("FNUejQiTyuGpg21ibHjNaDf2soWvAVJQXY").Get()), "ASICrefugee")
-		(CTxDestination(CBitcoinAddress("F7dAQcTUw41VN98HRdcZgrMfszVsWpqGtQ").Get()), "Woody20285POS")
-		(CTxDestination(CBitcoinAddress("FBiW4AyYDqRtosGHY19WWeyErrqQrCnRTy").Get()), "GoldTiger69")
-		(CTxDestination(CBitcoinAddress("F7BV2FgDixymA2t8dzanETGXK9v2HDHf55").Get()), "catotune")
-		(CTxDestination(CBitcoinAddress("FLL6wgVn9PVQP9HnjzRxmoNF6RtKEnz6Lt").Get()), "ZeeWolf")
-		(CTxDestination(CBitcoinAddress("FEuja4SwbXcBWq5MTn9UXB2ygKBNqDYoJK").Get()), "HORT")
-		(CTxDestination(CBitcoinAddress("FLcAPm13ZrQPfsU7KtdZNGnhzoZR34LMJ8").Get()), "whitetrash")
-		(CTxDestination(CBitcoinAddress("F7XZuq8QAUhs1c7endkDpHSqiyDNMUFkiK").Get()), "Rexxxem")
-		(CTxDestination(CBitcoinAddress("FATiB27UfQyySJCyM1dEQTaxMdZgqxHZ4y").Get()), "groggin")
-		(CTxDestination(CBitcoinAddress("F7CqzgLHwWqEZ97xKyNXFgvJA5QyFo5BCm").Get()), "Hashmaster1")
-		(CTxDestination(CBitcoinAddress("F9d5ncToTRjmY9qTzD1m5ZwLhHuZzpqHU3").Get()), "iDunk")
-		(CTxDestination(CBitcoinAddress("FSdifdoeqAwMWJeSRXrGFqXv1EM3tN3rnN").Get()), "CryptoWimp")
-		(CTxDestination(CBitcoinAddress("FFYMX4E8LbuB77z649MEvebUBitQUAexxG").Get()), "TimC_POS")
-		(CTxDestination(CBitcoinAddress("F7YnKgE4Ez4VjujmxCwHxYN3TfAiG7Z35d").Get()), "okane81")
-		(CTxDestination(CBitcoinAddress("FBhazXHyHPYVcXbeY2sCxqGjpbPorY4RdQ").Get()), "ASICrefugeePOS")
-		(CTxDestination(CBitcoinAddress("F9fNusJLCQjt4qq87xfALquEqZSTrAjBDH").Get()), "CapnBDL")
-		(CTxDestination(CBitcoinAddress("FSN2pyQhEjrfkhhjeeYZjZ7dCfTQzyaupD").Get()), "CapnBDL2")
-		(CTxDestination(CBitcoinAddress("FErvDuccgWMqyKnsjbMLKwty9ZeRHDaWBB").Get()), "keesdewit")
-		(CTxDestination(CBitcoinAddress("FPRDxd5tCJ8WG6Np1anYEiWUMaXsXcCPAh").Get()), "xProphet")	
-		
-		return groupList.count(destination);
-	}	
 	
 	int64_t GetValueIn(const MapPrevTx& mapInputs) const;
 

@@ -12,6 +12,7 @@
 #include "init.h"
 #include "ui_interface.h"
 #include "kernel.h"
+#include "additionalfee.h"
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
@@ -516,7 +517,7 @@ bool CTransaction::CheckTransaction() const
 	if(nTime > FORK_TIME_2 && nTime < FORK_TIME_3 && !IsAdditionalFeeIncluded())
 		return DoS(100, error("CTransaction::CheckTransaction() : additional fee is not included"));
 
-	if(nTime > FORK_TIME_3 && !IsAdditionalFeeIncludedV2())
+	if(nTime > FORK_TIME_4 && !IsAdditionalFeeIncludedV2())
 		return DoS(100, error("CTransaction::CheckTransaction() : additional fee is not included"));
 	
     return true;
@@ -580,7 +581,7 @@ int64_t CTransaction::GetValueInForAdditionalFee() const //presstab
 	{
 		CTxDestination outAddress;
 		ExtractDestination(txout.scriptPubKey, outAddress);
-		if(mapInAmounts.count(outAddress) || IsInFeeExcemptionList(outAddress))
+		if(mapInAmounts.count(outAddress) || AdditionalFee::IsInFeeExcemptionList(outAddress))
 			continue;
 		else
 			nValueInAdditionalFee += txout.nValue;
@@ -590,7 +591,7 @@ int64_t CTransaction::GetValueInForAdditionalFee() const //presstab
 }
 
 
-int64_t GetPaidFee()
+int64_t CTransaction::GetPaidFee() const
 {
 	int64_t nFeePaid = 0;
 	
@@ -602,7 +603,15 @@ int64_t GetPaidFee()
 			nFeePaid += txout.nValue;
 	}	
 }
+int64_t CTransaction::GetAdditionalFeeV2() const
+{
+	if(IsCoinStake())
+		return 0;
 
+	int64_t additionalFeeValue = GetValueInForAdditionalFee();
+
+	return AdditionalFee::GetAdditionalFeeFromTable(additionalFeeValue);
+}	
 bool CTransaction::IsAdditionalFeeIncluded() const
 {
 	if(IsCoinStake())
