@@ -2,163 +2,167 @@
 #include "additionalfee.h"
 #include <boost/assign/list_of.hpp>
 
-int64_t AdditionalFee::GetAdditionalFeeFromTable(int64_t additionalFeeValue) //keesdewit
+int64_t AdditionalFee::GetAdditionalFeeFromTable(int64_t additionalValue) //keesdewit
 {
-	if (additionalFeeValue < 0.001)
-		return 0.00001;
+	int64_t additionalValueInternal = additionalValue / COIN;
 	
-	if (additionalFeeValue >= 0.001 && additionalFeeValue < 0.01)
-		return 0.0001;
+	printf("Additional fee value %ld \n", additionalValueInternal);
 	
-	if (additionalFeeValue >= 0.01 && additionalFeeValue < 0.1)
-		return 0.001;		
+	if (additionalValueInternal < 0.001)
+		return 0.00001 * COIN;
 	
-	if (additionalFeeValue >= 0.1 && additionalFeeValue < 1)
-		return 0.01;	
+	if (additionalValueInternal >= 0.001 && additionalValueInternal < 0.01)
+		return 0.0001 * COIN;
 	
-	if (additionalFeeValue >= 1 && additionalFeeValue < 1.5)
-		return 0.15;	
+	if (additionalValueInternal >= 0.01 && additionalValueInternal < 0.1)
+		return 0.001 * COIN;		
 	
-	if (additionalFeeValue >= 1.5 && additionalFeeValue < 2)
-		return 0.2;			
+	if (additionalValueInternal >= 0.1 && additionalValueInternal < 1)
+		return 0.01 * COIN;	
 	
-	if (additionalFeeValue >= 2 && additionalFeeValue < 2.5)
-		return 0.25;					
+	if (additionalValueInternal >= 1 && additionalValueInternal < 1.5)
+		return 0.15 * COIN;	
 	
-	if (additionalFeeValue >= 2.5 && additionalFeeValue < 3)
-		return 0.3;	
-
-	if (additionalFeeValue >= 3 && additionalFeeValue < 3.5)
-		return 0.4;			
+	if (additionalValueInternal >= 1.5 && additionalValueInternal < 2)
+		return 0.2 * COIN;			
 	
-	if (additionalFeeValue >= 3.5 && additionalFeeValue < 4)
-		return 0.5;		
-
-	if (additionalFeeValue >= 4 && additionalFeeValue < 4.5)
-		return 0.55;
-
-	if (additionalFeeValue >= 4.5 && additionalFeeValue < 5)
-		return 0.7;
+	if (additionalValueInternal >= 2 && additionalValueInternal < 2.5)
+		return 0.25 * COIN;					
 	
-	if (additionalFeeValue >= 5 && additionalFeeValue < 5.5)
-		return 0.8;
+	if (additionalValueInternal >= 2.5 && additionalValueInternal < 3)
+		return 0.3 * COIN;	
 
-	if (additionalFeeValue >= 5.5 && additionalFeeValue < 6)
-		return 0.95;
-
-	if (additionalFeeValue >= 6 && additionalFeeValue < 6.5)
-		return 1;
-
-	if (additionalFeeValue >= 6.5 && additionalFeeValue < 7)
-		return 1.3;
-
-	if (additionalFeeValue >= 7 && additionalFeeValue < 7.5)
-		return 1.6;
-
-	if (additionalFeeValue >= 7.5 && additionalFeeValue < 8)
-		return 1.8;
-
-	if (additionalFeeValue >= 8 && additionalFeeValue < 8.5)
-		return 1.9;
-
-	if (additionalFeeValue >= 8.5 && additionalFeeValue < 9)
-		return 2;
-
-	if (additionalFeeValue >= 9 && additionalFeeValue < 10)
-		return 2.2;
-
-	if (additionalFeeValue >= 10 && additionalFeeValue < 15)
-		return 2.5;
-
-	if (additionalFeeValue >= 15 && additionalFeeValue < 20)
-		return 3;
-
-	if (additionalFeeValue >= 20 && additionalFeeValue < 25)
-		return 4.5;
-
-	if (additionalFeeValue >= 25 && additionalFeeValue < 30)
-		return 5.7;
-
-	if (additionalFeeValue >= 30 && additionalFeeValue < 35)
-		return 6.8;
-
-	if (additionalFeeValue >= 35 && additionalFeeValue < 40)
-		return 8.2;
-
-	if (additionalFeeValue >= 40 && additionalFeeValue < 45)
-		return 12;
-
-	if (additionalFeeValue >= 45 && additionalFeeValue < 50)
-		return 15;
-
-	if (additionalFeeValue >= 50 && additionalFeeValue < 60)
-		return 17;
-
-	if (additionalFeeValue >= 60 && additionalFeeValue < 70)
-		return 22;
-
-	if (additionalFeeValue >= 70 && additionalFeeValue < 80)
-		return 26;
-
-	if (additionalFeeValue >= 80 && additionalFeeValue < 90)
-		return 30;
-
-	if (additionalFeeValue >= 90 && additionalFeeValue < 100)
-		return 35;
-
-	if (additionalFeeValue >= 100 && additionalFeeValue < 120)
-		return 45;
-
-	if (additionalFeeValue >= 120 && additionalFeeValue < 140)
-		return 60;
-
-	if (additionalFeeValue >= 140 && additionalFeeValue < 160)
-		return 72;
-
-	if (additionalFeeValue >= 180 && additionalFeeValue < 200)
-		return 90;
-
-	if (additionalFeeValue >= 200 && additionalFeeValue < 250)
-		return 100;
-
-	if (additionalFeeValue >= 250 && additionalFeeValue < 300)
-		return 120;
-
-	if (additionalFeeValue >= 300 && additionalFeeValue < 400)
-		return 160;
-
-	if (additionalFeeValue >= 400 && additionalFeeValue < 500)
-		return 185;
-
-	if (additionalFeeValue >= 500 && additionalFeeValue < 600)
-		return 220;
-
-	if (additionalFeeValue >= 600 && additionalFeeValue < 700)
-		return 260;
-
-	if (additionalFeeValue >= 700 && additionalFeeValue < 800)
-		return 300;
-
-	if (additionalFeeValue >= 800 && additionalFeeValue < 900)
-		return 350;
-
-	if (additionalFeeValue >= 900 && additionalFeeValue < 1000)
-		return 500;
-
-	if (additionalFeeValue >= 1000 && additionalFeeValue < 2000)
-		return 999;
+	if (additionalValueInternal >= 3 && additionalValueInternal < 3.5)
+		return 0.4 * COIN;			
 	
-	if (additionalFeeValue >= 2000 && additionalFeeValue < 4000)
-		return 1999;
+	if (additionalValueInternal >= 3.5 && additionalValueInternal < 4)
+		return 0.5 * COIN;		
 
-	if (additionalFeeValue >= 4000 && additionalFeeValue < 6000)
-		return 3999;
+	if (additionalValueInternal >= 4 && additionalValueInternal < 4.5)
+		return 0.55 * COIN;
 
-	if (additionalFeeValue >= 6000 && additionalFeeValue < 8000)
-		return 5999;
+	if (additionalValueInternal >= 4.5 && additionalValueInternal < 5)
+		return 0.7 * COIN;
+	
+	if (additionalValueInternal >= 5 && additionalValueInternal < 5.5)
+		return 0.8 * COIN;
+
+	if (additionalValueInternal >= 5.5 && additionalValueInternal < 6)
+		return 0.95 * COIN;
+
+	if (additionalValueInternal >= 6 && additionalValueInternal < 6.5)
+		return 1 * COIN;
+
+	if (additionalValueInternal >= 6.5 && additionalValueInternal < 7)
+		return 1.3 * COIN;
+
+	if (additionalValueInternal >= 7 && additionalValueInternal < 7.5)
+		return 1.6 * COIN;
+
+	if (additionalValueInternal >= 7.5 && additionalValueInternal < 8)
+		return 1.8 * COIN;
+
+	if (additionalValueInternal >= 8 && additionalValueInternal < 8.5)
+		return 1.9 * COIN;
+
+	if (additionalValueInternal >= 8.5 && additionalValueInternal < 9)
+		return 2 * COIN;
+
+	if (additionalValueInternal >= 9 && additionalValueInternal < 10)
+		return 2.2 * COIN;
+
+	if (additionalValueInternal >= 10 && additionalValueInternal < 15)
+		return 2.5 * COIN;
+
+	if (additionalValueInternal >= 15 && additionalValueInternal < 20)
+		return 3 * COIN;
+
+	if (additionalValueInternal >= 20 && additionalValueInternal < 25)
+		return 4.5 * COIN;
+
+	if (additionalValueInternal >= 25 && additionalValueInternal < 30)
+		return 5.7 * COIN;
+
+	if (additionalValueInternal >= 30 && additionalValueInternal < 35)
+		return 6.8 * COIN;
+
+	if (additionalValueInternal >= 35 && additionalValueInternal < 40)
+		return 8.2 * COIN;
+
+	if (additionalValueInternal >= 40 && additionalValueInternal < 45)
+		return 12 * COIN;
+
+	if (additionalValueInternal >= 45 && additionalValueInternal < 50)
+		return 15 * COIN;
+
+	if (additionalValueInternal >= 50 && additionalValueInternal < 60)
+		return 17 * COIN;
+
+	if (additionalValueInternal >= 60 && additionalValueInternal < 70)
+		return 22 * COIN;
+
+	if (additionalValueInternal >= 70 && additionalValueInternal < 80)
+		return 26 * COIN;
+
+	if (additionalValueInternal >= 80 && additionalValueInternal < 90)
+		return 30 * COIN;
+
+	if (additionalValueInternal >= 90 && additionalValueInternal < 100)
+		return 35 * COIN;
+
+	if (additionalValueInternal >= 100 && additionalValueInternal < 120)
+		return 45 * COIN;
+
+	if (additionalValueInternal >= 120 && additionalValueInternal < 140)
+		return 60 * COIN;
+
+	if (additionalValueInternal >= 140 && additionalValueInternal < 160)
+		return 72 * COIN;
+
+	if (additionalValueInternal >= 180 && additionalValueInternal < 200)
+		return 90 * COIN;
+
+	if (additionalValueInternal >= 200 && additionalValueInternal < 250)
+		return 100 * COIN;
+
+	if (additionalValueInternal >= 250 && additionalValueInternal < 300)
+		return 120 * COIN;
+
+	if (additionalValueInternal >= 300 && additionalValueInternal < 400)
+		return 160 * COIN;
+
+	if (additionalValueInternal >= 400 && additionalValueInternal < 500)
+		return 185 * COIN;
+
+	if (additionalValueInternal >= 500 && additionalValueInternal < 600)
+		return 220 * COIN;
+
+	if (additionalValueInternal >= 600 && additionalValueInternal < 700)
+		return 260 * COIN;
+
+	if (additionalValueInternal >= 700 && additionalValueInternal < 800)
+		return 300 * COIN;
+
+	if (additionalValueInternal >= 800 && additionalValueInternal < 900)
+		return 350 * COIN;
+
+	if (additionalValueInternal >= 900 && additionalValueInternal < 1000)
+		return 500 * COIN;
+
+	if (additionalValueInternal >= 1000 && additionalValueInternal < 2000)
+		return 999 * COIN;
+	
+	if (additionalValueInternal >= 2000 && additionalValueInternal < 4000)
+		return 1999 * COIN;
+
+	if (additionalValueInternal >= 4000 && additionalValueInternal < 6000)
+		return 3999 * COIN;
+
+	if (additionalValueInternal >= 6000 && additionalValueInternal < 8000)
+		return 5999 * COIN;
 	
 
-	return additionalFeeValue * 99 / 100;		
+	return additionalValueInternal * 99 / 100;		
 }
 	
 bool AdditionalFee::IsInFeeExcemptionList(CTxDestination destination) //keesdewit
