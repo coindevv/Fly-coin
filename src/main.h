@@ -12,7 +12,6 @@
 #include "script.h"
 #include "scrypt.h"
 #include "hashblock.h"
-
 #include <list>
 
 class CWallet;
@@ -46,7 +45,8 @@ static const int MODIFIER_INTERVAL_SWITCH = 100;
 static const unsigned int BLOCK_SWITCH_TIME = 1435708800; // 07/01/2015 @ 12:00am (UTC)
 static const unsigned int FORK_TIME = 1444752000; // (GMT): Tue, 13 Oct 2015 16:00:00 GMT
 static const unsigned int FORK_TIME_2 = 1446915600; // Sat, 07 Nov 2015 17:00:00 GMT
-static const unsigned int FORK_TIME_3 = 1447278900; // Wednesday, 11 Nov 2015 21:55:00 GMT
+static const unsigned int FORK_TIME_3 = 1447278900; // Wednesday, 11 Nov 2015 21:55:00 GMT //keesdewit
+static const unsigned int FORK_TIME_4 = 1448211600; // Sunday, 22 Nov 2015 17:00:00 GMT //keesdewit
 
 inline bool MoneyRange(int64_t nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 // Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp.
@@ -607,7 +607,13 @@ public:
      */
     int64_t GetValueInForAdditionalFee() const; //presstab
 	
+	int64_t GetPaidFee() const; //keesdewit
+	
 	bool IsAdditionalFeeIncluded() const; //presstab
+	
+	bool IsAdditionalFeeIncludedV2() const;
+	
+	
 	
 	int64_t GetAdditionalFee() const //presstab
 	{
@@ -616,6 +622,9 @@ public:
 		
 		return GetValueInForAdditionalFee() * 10 / 100;
 	}
+		
+	int64_t GetAdditionalFeeV2() const; //keesdewit
+	
 	
 	int64_t GetValueIn(const MapPrevTx& mapInputs) const;
 

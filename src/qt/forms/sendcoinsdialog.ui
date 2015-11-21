@@ -610,33 +610,6 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="returnChangeCheckBox">
-            <property name="text">
-             <string>Return Change</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="checkBoxCoinControlChange">
-            <property name="text">
-             <string>Custom Change Address</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="lineEditCoinControlChange">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QLabel" name="labelCoinControlChangeLabel">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">

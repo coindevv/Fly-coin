@@ -18,28 +18,6 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0
 }
 
-#Added win32 conditional - Yash
-#    QMAKE_TARGET_BUNDLE_PREFIX = co.opalcoin
-#    BOOST_LIB_SUFFIX=-mt
-#    BOOST_INCLUDE_PATH=/usr/local/Cellar/boost/1.57.0/include
-#    BOOST_LIB_PATH=/usr/local/Cellar/boost/1.57.0/lib
-#
-#    BDB_INCLUDE_PATH=/usr/local/opt/berkeley-db4/include
-#    BDB_LIB_PATH=/usr/local/Cellar/berkeley-db4/4.8.30/lib
-#
-#    OPENSSL_INCLUDE_PATH=/usr/local/opt/openssl/include
-#    OPENSSL_LIB_PATH=/usr/local/opt/openssl/lib
-#
-#    MINIUPNPC_INCLUDE_PATH=/usr/local/opt/miniupnpc/include
-#    MINIUPNPC_LIB_PATH=/usr/local/Cellar/miniupnpc/1.9.20141027/lib
-#
-#    QRENCODE_INCLUDE_PATH=/usr/local/opt/qrencode/include
-#    QRENCODE_LIB_PATH=/usr/local/opt/qrencode/lib
-#
-#    DEFINES += IS_ARCH_64
-#    QMAKE_CXXFLAGS += -arch x86_64 -stdlib=libc++
-#    QMAKE_CFLAGS += -arch x86_64
-#    QMAKE_LFLAGS += -arch x86_64 -stdlib=libc++
 
 
 
@@ -52,6 +30,23 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 # Dependency library locations can be customized with:
 #    BOOST_INCLUDE_PATH, BOOST_LIB_PATH, BDB_INCLUDE_PATH,
 #    BDB_LIB_PATH, OPENSSL_INCLUDE_PATH and OPENSSL_LIB_PATH respectively
+
+win32 {
+	BOOST_LIB_SUFFIX=-mgw49-mt-s-1_55
+	BOOST_INCLUDE_PATH=D:/deps/boost_1_55_0
+	BOOST_LIB_PATH=D:/deps/boost_1_55_0/stage/lib
+	BDB_INCLUDE_PATH=D:/deps/db-4.8.30.NC/build_unix
+	BDB_LIB_PATH=D:/deps/db-4.8.30.NC/build_unix
+	OPENSSL_INCLUDE_PATH=D:/deps/openssl-1.0.2d/include
+	OPENSSL_LIB_PATH=D:/deps/openssl-1.0.2d
+	MINIUPNPC_INCLUDE_PATH=D:/deps/miniupnpc
+	MINIUPNPC_LIB_PATH=D:/deps/miniupnpc
+	MINIUPNP_STATICLIB=D:/deps/miniupnpc
+	QRENCODE_INCLUDE_PATH=D:/deps/qrencode-3.4.4
+	QRENCODE_LIB_PATH=D:/deps/qrencode-3.4.4/.libs
+    SECP256K1_LIB_PATH = D:/deps/secp256k1/.libs
+    SECP256K1_INCLUDE_PATH = D:/deps/secp256k1/include	
+} 
 
 OBJECTS_DIR = build
 MOC_DIR = build
@@ -304,7 +299,8 @@ HEADERS += src/qt/bitcoingui.h \
         src/sph_hamsi.h \
     src/sph_types.h \
     src/threadsafety.h \
-    src/txdb-leveldb.h
+    src/txdb-leveldb.h \
+	src/additionalfee.h
 
 SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/qt/transactiontablemodel.cpp \
@@ -378,7 +374,8 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/scrypt-x86.S \
     src/scrypt-x86_64.S \
     src/scrypt.cpp \
-    src/pbkdf2.cpp
+    src/pbkdf2.cpp \
+	src/additionalfee.cpp
 
 RESOURCES += \
     src/qt/bitcoin.qrc

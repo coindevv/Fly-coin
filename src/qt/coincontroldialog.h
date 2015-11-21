@@ -33,6 +33,7 @@ public:
     static QList<std::pair<QString, qint64> > payAmounts;
     static CCoinControl *coinControl;
 	static int nSplitBlockCount;
+	
 
 private:
     Ui::CoinControlDialog *ui;
