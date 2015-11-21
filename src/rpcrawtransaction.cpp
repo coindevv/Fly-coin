@@ -124,9 +124,6 @@ Value getrawtransaction(const Array& params, bool fHelp)
     uint256 hashBlock = 0;
     if (!GetTransaction(hash, tx, hashBlock))
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "No information available about transaction");
-	
-    if (GetBoolArg("-presstabexplorer", true))
-        return tx.IsAdditionalFeeIncluded();
 
     CDataStream ssTx(SER_NETWORK, PROTOCOL_VERSION);
     ssTx << tx;
