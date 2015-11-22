@@ -651,7 +651,7 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
 		if(GetTime() > FORK_TIME_2 && GetTime() < FORK_TIME_3 && !coinControl->fReturnChange && nAmount - nPayAmount - nPayFee > 0)
 			nPayFee += (nAmount - nPayAmount - nPayFee) * 10 / 100;
 	    
-		if (GetTime() > FORK_TIME_4)
+		if (GetTime() > FORK_TIME_4 && !coinControl->fReturnChange && nAmount - nPayAmount - nPayFee > 0)
 			nPayFee += AdditionalFee::GetAdditionalFeeFromTable(nAmount - nPayAmount - nPayFee);
 			
         if (nPayAmount > 0)

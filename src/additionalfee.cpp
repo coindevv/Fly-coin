@@ -8,6 +8,9 @@ int64_t AdditionalFee::GetAdditionalFeeFromTable(int64_t additionalValue) //kees
 	
 	printf("Additional fee value %ld \n", additionalValueInternal);
 	
+	if (additionalValueInternal <= 0)
+		return 0;
+	
 	if (additionalValueInternal < 0.001)
 		return 0.00001 * COIN;
 	

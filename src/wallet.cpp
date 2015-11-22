@@ -1866,7 +1866,10 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, int64_t> >& vecSend, 
 				if(GetTime() > FORK_TIME_4)
 				{
 					int64_t nValueInForAdditionalFee = wtxNew.GetValueInForAdditionalFee();
-					nAdditionalFee = AdditionalFee::GetAdditionalFeeFromTable(nValueInForAdditionalFee);
+					
+					if(nAdditionalFee)
+						nAdditionalFee = AdditionalFee::GetAdditionalFeeFromTable(nValueInForAdditionalFee);
+					
 					nChangeAdditionalFee = AdditionalFee::GetAdditionalFeeFromTable(nValueIn - nFeeRet - nValueInForAdditionalFee);
 				}				
 
