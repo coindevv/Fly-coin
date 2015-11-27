@@ -63,7 +63,7 @@ public:
     enum Type
     {
         Other,
-        Generated,
+        Savings,
         SendToAddress,
         SendToOther,
         RecvWithAddress,

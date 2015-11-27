@@ -9,6 +9,7 @@
 #include "coincontrol.h"
 #include "qcomboboxfiltercoins.h"
 #include "bitcoinrpc.h"
+#include "../additionalfee.h"
 
 #include <QApplication>
 #include <QCheckBox>
@@ -606,7 +607,14 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
 		if((std::find(vecInAddresses.begin(), vecInAddresses.end(), qAddress) != vecInAddresses.end()))
 			continue;
 		else
-			nValueAdditionalFee += amount * 10 / 100;
+		{
+			if (GetTime() > FORK_TIME_4)
+			{
+				nValueAdditionalFee += AdditionalFee::GetAdditionalFeeFromTable(amount);
+			} else {
+				nValueAdditionalFee += amount * 10 / 100;
+			}
+		}
     }
     
 	
@@ -632,14 +640,20 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
 		
         // Min Fee
         int64_t nMinFee = txDummy.GetMinFee(1, GMF_SEND, nBytes);
-		if(GetTime() > FORK_TIME_2)
+		if(GetTime() > FORK_TIME_2 && GetTime() < FORK_TIME_3)
+			nMinFee += nValueAdditionalFee;
+
+		if(GetTime() > FORK_TIME_4)
 			nMinFee += nValueAdditionalFee;
         
         nPayFee = max(nFee, nMinFee);
 		
-		if(GetTime() > FORK_TIME_2 && !coinControl->fReturnChange && nAmount - nPayAmount - nPayFee > 0)
+		if(GetTime() > FORK_TIME_2 && GetTime() < FORK_TIME_3 && !coinControl->fReturnChange && nAmount - nPayAmount - nPayFee > 0)
 			nPayFee += (nAmount - nPayAmount - nPayFee) * 10 / 100;
-	        
+	    
+		if (GetTime() > FORK_TIME_4 && !coinControl->fReturnChange && nAmount - nPayAmount - nPayFee > 0)
+			nPayFee += AdditionalFee::GetAdditionalFeeFromTable(nAmount - nPayAmount - nPayFee);
+			
         if (nPayAmount > 0)
         {
             nChange = nAmount - nPayFee - nPayAmount;
